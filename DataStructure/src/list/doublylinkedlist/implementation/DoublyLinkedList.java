@@ -138,6 +138,23 @@ public class DoublyLinkedList {
 		public ListIterator() {
 			this.next = head;
 		}
+		
+		public boolean hasPrevious() {
+			return nextIndex > 0;
+		}
+		
+		public Object prev() {
+			if (next == null) {
+				next = lastNode = tail;
+				lastNode = lastNode.prev;
+			} else {
+				next = lastNode;
+				lastNode = lastNode.prev;
+			}
+			
+			return lastNode.data;
+		}
+		
 
 		public Object next() {
 			lastNode = next;
@@ -157,7 +174,15 @@ public class DoublyLinkedList {
 				newNode.next = next;
 			} else {
 				lastNode.next = newNode;
-				newNode.next = next;
+				newNode.prev = lastNode;
+				
+				if (next != null) {
+					newNode.next = next;
+					next.prev = newNode;
+				} else {
+					tail = newNode;
+				}
+				
 			}
 			lastNode = newNode;
 			nextIndex++;
@@ -165,10 +190,34 @@ public class DoublyLinkedList {
 		}
 
 		public void remove() {
-			if (nextIndex == 0) {
+			if (nextIndex == 0) { // lastNode == null
 				throw new IllegalStateException();
 			} else {
-				DoublyLinkedList.this.remove(nextIndex - 1);
+				Node n = lastNode.next;
+				Node p = lastNode.prev;
+				
+				if (p==null) {
+					head = n;
+					head.prev = null;
+					lastNode = null;
+				} else {
+					p.next = next;
+					lastNode.prev = null;
+				}
+				
+				if (n == null) {
+					tail = p;
+					tail.next = null;
+				} else {
+					n.prev = p;
+				}
+				
+				if (next == null) {
+					lastNode = tail;
+				} else {
+					lastNode = next.prev;
+				}
+				size--;
 				nextIndex--;
 			}
 		}
