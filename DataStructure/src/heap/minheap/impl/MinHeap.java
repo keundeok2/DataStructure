@@ -15,7 +15,7 @@ public class MinHeap {
 		heap.add(data);
 		int position = heap.size() - 1;
 
-		// 루트 노드까지 이동했거나 부모 heap이 자식 heap보다 클 때 까지
+		// 루트 노드까지 이동했거나 부모 heap이 자식 heap보다 작을 때 까지
 		while (position > 1 && heap.get(position / 2) > heap.get(position)) {
 			int temp = heap.get(position / 2);
 			heap.set(position / 2, heap.get(position));
@@ -37,10 +37,11 @@ public class MinHeap {
 		heap.remove(heap.size()-1); // 최하위 노드 삭제
 		
 		int position = 1;
-		while ((position * 2) < heap.size()) {
+		while ((position * 2) < heap.size()) { //	왼쪽 자식 노드의 index가 size보다 작아야함
 			int min = heap.get(position*2);
 			int minPos = position * 2;
 			
+			// 왼쪽 자식, 오른쪽 자식 값 비교해서 min, minPos 변경
 			if (((position * 2 + 1 ) < heap.size()) && min > heap.get(position * 2 + 1)) {
 				min = heap.get(position * 2 + 1);
 				minPos = position * 2 + 1;
